@@ -3,6 +3,7 @@ package com.banking.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,8 +71,14 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/transactions/{id}")
-	public ResponseEntity<List<TransactionResponseDTO>> getTransactions(@PathVariable Long id){
-		return ResponseEntity.ok(customerService.getTransactionHistory(id));
+	public ResponseEntity<Page<TransactionResponseDTO>> getTransactions(
+			@PathVariable Long id,
+			@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int size,
+			@RequestParam(defaultValue = "transactionTime") String sortBy,
+			@RequestParam(defaultValue = "desc") String direction){
+		
+		return ResponseEntity.ok(customerService.getTransactionHistory(id, page, size, sortBy, direction));
 	}
 	
 	@PostMapping("/transfer")

@@ -1,7 +1,7 @@
 package com.banking.repository;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.banking.entity.Transaction;
@@ -12,6 +12,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>{
 	
 	/*Spring JPA reads method name and automatically generates query, equivalent to:
 	 SELECT * FROM transactions WHERE customer_id = ?*/
-	List<Transaction> findByCustomerId(Long customerId);
+	
+	//24/02/26 - Updated repository for pagination using page and page able
+	Page<Transaction> findByCustomerId(Long customerId, Pageable pageable);
 
 }

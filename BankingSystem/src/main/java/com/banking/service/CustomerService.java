@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,13 +157,21 @@ public class CustomerService {
 	}
 	
 	//Transaction history method. Now controller doesn't talk to repository directly anymore
-	public List<TransactionResponseDTO> getTransactionHistory(Long customerId){
+	//24/02/26 - Added Pagination Logic
+	public Page<TransactionResponseDTO> getTransactionHistory(
+			Long customerId, int page, int size, String sortBy, String direction){
 		if(!customerRepository.existsById(customerId)) {
 			throw new RuntimeException("Customer not found");
 		}
 		
-		List<Transaction> transactions = transactionRepository.findByCustomerId(customerId);
-		return transactions.stream().map(this::mapToTransactionDTO).toList();
+		Sort sort = direction.equalsIgnoreCase("desc")
+				? Sort.by(sortBy).descending()
+				: Sort.by(sortBy).ascending();
+		
+		Pageable pageable = PageRequest.of(page, size, sort);
+		Page<Transaction> transactions = transactionRepository.findByCustomerId(customerId, pageable);
+		
+		return transactions.map(this::mapToTransactionDTO);
 	}
 	
 	//Transfer method
