@@ -15,7 +15,7 @@ public class SwaggerConfig {
 	@Bean
 	public OpenAPI bankingAPI() {
 		
-		final String securitySchemeName = "basicAuth";
+		final String securitySchemeName = "bearerAuth";
 		
 		return new OpenAPI().info(new Info()
 				.title("Mini Banking System API")
@@ -26,7 +26,9 @@ public class SwaggerConfig {
 						.addSecuritySchemes(securitySchemeName, new SecurityScheme()
 								.name(securitySchemeName)
 								.type(SecurityScheme.Type.HTTP)
-								.scheme("basic")));
+								.scheme("bearer")
+								.bearerFormat("JWT")
+								));
 	}
 
 }

@@ -13,12 +13,12 @@ import com.banking.dto.TransactionResponseDTO;
 import com.banking.dto.TransferRequestDTO;
 import com.banking.dto.TransferResponseDTO;
 import com.banking.entity.Customer;
-import com.banking.entity.Transaction;
 import com.banking.repository.TransactionRepository;
 import com.banking.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -34,6 +34,7 @@ import jakarta.validation.Valid;
 @Tag(name = "Customer APIs", description = "Operations related to customers and transactions")
 @RestController
 @RequestMapping("/api/customers")
+@SecurityRequirement(name = "bearerAuth")
 public class CustomerController {
 	
 	@Autowired
